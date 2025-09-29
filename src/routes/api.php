@@ -18,12 +18,12 @@ Route::middleware('auth:sanctum')->group(function (){
 });
 
 // Admin routes
-Route::middleware(['auth:sanctum', 'admin'])->group(functio (){
+Route::middleware(['auth:sanctum', 'admin'])->group(function (){
     Route::post('/salas', [SalaController::class, 'store']);
     Route::put('/salas/{id}', [SalaController::class], 'update');
     Route::delete('/salas/{id}', [SalaController::class], 'destroy');
     Route::delete('/usuarios/{id}', [UsuarioController::class, 'destroy']);
-    Route::post('/usuarios/{id}/restore', [UsuarioController::class, 'restore'])
+    Route::post('/usuarios/{id}/restore', [UsuarioController::class, 'restore']);
 
     Route::post('/equipamento', [EquipamentoController::class], 'store');
     Route::put('/equipamento', [EquipamentoController::class], 'update');
