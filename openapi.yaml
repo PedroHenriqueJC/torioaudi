@@ -1,0 +1,242 @@
+openapi: 3.0.0
+info:
+  title: API de Gestão de Salas e Equipamentos
+  version: 1.0.0
+  description: >
+    API para gerenciamento de usuários, salas e equipamentos.  
+    Algumas rotas são restritas a administradores via middleware `admin`.
+
+servers:
+  - url: http://localhost:8000/api
+    description: Servidor local
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        cod_usuario:
+          type: integer
+        nome_usuario:
+          type: string
+        email_usuario:
+          type: string
+        role_usuario:
+          type: integer
+          description: 0 = usuário comum, 1 = admin
+
+    Sala:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        capacidade:
+          type: integer
+
+    Equipamento:
+      type: object
+      properties:
+        id:
+          type: integer
+        nome:
+          type: string
+        descricao:
+          type: string
+
+paths:
+  /register:
+    post:
+      summary: Registrar usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [nome_usuario, email_usuario, senha_usuario]
+              properties:
+                nome_usuario: { type: string }
+                email_usuario: { type: string, format: email }
+                senha_usuario: { type: string, minLength: 6 }
+      responses:
+        '201': { description: Usuário registrado com sucesso }
+        '403': { description: Usuário soft-deleted precisa falar com admin }
+        '422': { description: Email já cadastrado }
+
+  /login:
+    post:
+      summary: Login do usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email_usuario, senha_usuario]
+              properties:
+                email_usuario: { type: string, format: email }
+                senha_usuario: { type: string }
+      responses:
+        '200': { description: Login realizado com sucesso }
+        '401': { description: Credenciais inválidas }
+        '403': { description: Usuário desativado }
+
+  /logout:
+    post:
+      summary: Logout
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Logout realizado com sucesso }
+
+  /me:
+    get:
+      summary: Dados do usuário autenticado
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Dados do usuário retornados }
+
+  /salas:
+    get:
+      summary: Listar todas as salas
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Lista de salas }
+    post:
+      summary: Criar sala (admin)
+      security:
+        - bearerAuth: []
+      responses:
+        '201': { description: Sala criada com sucesso }
+
+  /salas/{id}:
+    get:
+      summary: Obter detalhes da sala
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: Detalhes da sala }
+    put:
+      summary: Atualizar sala (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: Sala atualizada }
+    delete:
+      summary: Excluir sala (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: Sala removida }
+
+  /equipamento:
+    get:
+      summary: Listar equipamentos
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Lista de equipamentos }
+    post:
+      summary: Criar equipamento (admin)
+      security:
+        - bearerAuth: []
+      responses:
+        '201': { description: Equipamento criado }
+
+  /equipamento/{id}:
+    get:
+      summary: Obter equipamento
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: Detalhes do equipamento }
+    put:
+      summary: Atualizar equipamento (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: Equipamento atualizado }
+    delete:
+      summary: Excluir equipamento (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: Equipamento removido }
+
+  /usuarios/{id}:
+    delete:
+      summary: Soft delete de usuário (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: Usuário desativado }
+
+  /usuarios/{id}/restore:
+    post:
+      summary: Restaurar usuário (admin)
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200': { description: Usuário reativado }
+
+  /health:
+    get:
+      summary: Healthcheck da API
+      responses:
+        '200':
+          description: API está funcionando
+          content:
+            application/json:
+              example:
+                status: ok
+                timestamp: 2025-09-25T14:00:00Z
