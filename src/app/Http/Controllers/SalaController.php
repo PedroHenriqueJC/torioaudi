@@ -34,7 +34,7 @@ class SalaController extends Controller
     public function show($id){
         $sala = Sala::find($id);
         if(!$sala){
-            return response->json(['message' => 'Sala não encontrada'], 404);
+            return response()->json(['message' => 'Sala não encontrada'], 404);
         }
 
         return response()->json($sala, 200);
@@ -43,7 +43,7 @@ class SalaController extends Controller
     public function update(Request $request, $id){
         $sala = Sala::find($id);
         if(!$sala){
-            return response->json(['message' => 'Sala não encontrada'], 404);
+            return response()->json(['message' => 'Sala não encontrada'], 404);
         }
 
         $request->validate([
@@ -62,7 +62,7 @@ class SalaController extends Controller
     public function destroy($id){
         $sala = Sala::find($id);
         if(!$sala){
-            return response->json(['message' => 'Sala não encontrada'], 404);
+            return response()->json(['message' => 'Sala não encontrada'], 404);
         }
         $sala->delete();
         return response()->json(['message' => 'Sala deletada com sucesso'], 200);
