@@ -26,23 +26,32 @@ class EquipamentoController extends Controller
         ], 201);
     }
 
+
+
     public function index(Request $request){
-        return response()->json(Equipamento::all(), 200);
+        $query = Equipamento::query();
+        
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $query->where('nome_equipamento', 'LIKE', "%{$searchTerm}%");
+        }
+        
+        return response()->json($query->get(), 200);
     }
 
     public function show($id){
-        $equipamento = Equipamento::find($id);
+        $equipamento = Equipamento::find((int)$id);
         if(!$equipamento){
-            return response()->json(['message' = 'Equipamento não encontrado'], 404);
+            return response()->json(['message' => 'Equipamento não encontrado'], 404);
         }
 
         return response()->json($equipamento,200);
     }
 
     public function update(Request $request, $id){
-        $equipamento = Equipamento::find($id);
+        $equipamento = Equipamento::find((int)$id);
         if(!$equipamento){
-            return response()->json(['message' = 'Equipamento não encontrado'], 404);
+            return response()->json(['message' => 'Equipamento não encontrado'], 404);
         }
 
         $request->validate([
@@ -59,7 +68,7 @@ class EquipamentoController extends Controller
     }
 
     public function destroy($id){
-        $equipamento = Equipamento::find($id);
+        $equipamento = Equipamento::find((int)$id);
         if(!$equipamento){
             return response()->json(['message' => 'Equipamento não encontrado'], 404);
         }

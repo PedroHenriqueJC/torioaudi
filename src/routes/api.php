@@ -3,8 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
-use App\Http\Controller\SalaController;
-use App\Http\Controller\EquipamentoController;
+use App\Http\Controllers\SalaController;
+use App\Http\Controllers\EquipamentoController;
 
 // Logged routes
 Route::middleware('auth:sanctum')->group(function (){

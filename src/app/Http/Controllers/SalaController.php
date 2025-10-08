@@ -53,10 +53,10 @@ class SalaController extends Controller
         ]);
 
         $sala->update($request->only(['nome_sala', 'capacidade_sala', 'localizacao_sala']));
-        return response()->json{[
+        return response()->json([
             'message' => 'Sala atualizada com sucesso!',
             'sala' => $sala,
-        ], 200};
+        ], 200);
     }
 
     public function destroy($id){
