@@ -12,22 +12,24 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::post('/logout', [UsuarioController::class, 'logout']);
 
     Route::get('/salas', [SalaController::class, 'index']);
-    Route::get('/salas/{id}', [SalaController::class], 'show');
-    Route::get('/equipamento', [EquipamentoController::class], 'index');
-    Route::get('/equipamento/{id}', [EquipamentoController::class], 'show');
+    Route::get('/salas/{id}', [SalaController::class, 'show']);
+    Route::get('/equipamento', [EquipamentoController::class, 'index']);
+    Route::get('/equipamento/{id}', [EquipamentoController::class, 'show']);
 });
 
 // Admin routes
 Route::middleware(['auth:sanctum', 'admin'])->group(function (){
     Route::post('/salas', [SalaController::class, 'store']);
-    Route::put('/salas/{id}', [SalaController::class], 'update');
-    Route::delete('/salas/{id}', [SalaController::class], 'destroy');
+    Route::put('/salas/{id}', [SalaController::class, 'update']);
+    Route::delete('/salas/{id}', [SalaController::class, 'destroy']);
     Route::delete('/usuarios/{id}', [UsuarioController::class, 'destroy']);
     Route::post('/usuarios/{id}/restore', [UsuarioController::class, 'restore']);
+    Route::get('/usuarios', [UsuarioController::class, 'index']);
 
-    Route::post('/equipamento', [EquipamentoController::class], 'store');
-    Route::put('/equipamento', [EquipamentoController::class], 'update');
-    Route::delete('/equipamento', [EquipamentoController::class], 'destroy');
+
+    Route::post('/equipamento', [EquipamentoController::class, 'store']);
+    Route::put('/equipamento/{id}', [EquipamentoController::class, 'update']);
+    Route::delete('/equipamento/{id}', [EquipamentoController::class, 'destroy']);
 });
 
 Route::post('/register', [UsuarioController::class, 'register']);
