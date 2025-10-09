@@ -17,10 +17,10 @@ class UsuarioController extends Controller
             'senha_usuario' => 'required|string|min:6',
         ]);
 
-        $existe = User::withTrashed()->where('email_usuario', $request->email_usuario)->first();
+        $existe = Usuario::withTrashed()->where('email_usuario', $request->email_usuario)->first();
 
         if($existe){
-            $if($existe->delete_at){
+            if($existe->deleted_at){
                 return response()->json(['message' => 'Seu usuário foi desativado. Por favor, entre em contato com um administrador.'], 403);
             }
 
@@ -70,13 +70,16 @@ class UsuarioController extends Controller
     }
 
     public function index(Request $request){
-        $usuario = $request->user();
+        $perPage = (int) $request->query('per_page', 50);
 
-        if(!$usuario->isAdmin()){
-            return response()->json(['message' => 'Acesso negado!'], 403);
+        if ($perPage < 1) {
+            $perPage = 50;
+        } elseif ($perPage > 200) {
+            $perPage = 200;
         }
-
-        return response()->json(Usuario::all(), 200);
+        $usuarios = Usuario::select('cod_usuario','nome_usuario','email_usuario', 'role_usuario')
+                    ->paginate($perPage);
+        return response()->json($usuarios, 200);
     }
 
     public function show(Request $request, $id){
@@ -147,7 +150,7 @@ class UsuarioController extends Controller
     }
 
     public function restore($id){
-        $user = Usuario::withTreashed()->find($id);
+        $user = Usuario::withTrashed()->find($id);
 
         if(!$user){
             return response()->json(['message' => 'Usuário não encontrado'], 404);
@@ -162,7 +165,7 @@ class UsuarioController extends Controller
         return response()->json([
             'message' => 'Usuário reativo com sucesso',
             'usuario' => $user,
-        ], 200)
+        ], 200);
     }
 
 
