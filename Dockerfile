@@ -9,6 +9,12 @@ RUN apt-get update && apt-get install -y \
     zip \
     && docker-php-ext-install pdo pdo_pgsql
 
+# Enable OPcache for performance
+RUN docker-php-ext-install opcache
+
+# Recommended OPcache settings
+COPY ./docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
