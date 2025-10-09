@@ -9,7 +9,7 @@ class Sala extends Model
 {
     use HasFactory;
 
-    protected $table = 'salas';
+    protected $table = 'sala';
     protected $primaryKey = 'cod_sala';
     public $incrementing = true;
     protected $keyType = 'int';

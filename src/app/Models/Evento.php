@@ -9,7 +9,7 @@ class Evento extends Model
 {
     use HasFactory;
 
-    protected $table = 'eventos';
+    protected $table = 'evento';
     protected $primaryKey = 'cod_evento';
     public $incrementing = true;
     protected $keyType = 'int';

@@ -9,7 +9,7 @@ class Equipamento extends Model
 {
     use HasFactory;
 
-    protected $table = 'equipamentos';
+    protected $table = 'equipamento';
     protected $primaryKey = 'cod_equipamento';
     public $incrementing = true;
     protected $keyType = 'int';
