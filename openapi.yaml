@@ -137,8 +137,37 @@ paths:
       tags: [Admin]
       summary: Criar sala (admin)
       security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome_sala:
+                  type: string
+                  maxLength: 255
+                  example: "Laboratório de Informática"
+                capacidade_sala:
+                  type: integer
+                  minimum: 1
+                  example: 30
+                localizacao_sala:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  example: "Bloco B - 2º andar"
+                descricao_sala:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  example: "Sala equipada com computadores e projetor"
+              required:
+                - nome_sala
+                - capacidade_sala
       responses:
         '201': { description: Sala criada com sucesso }
+        '400': {description: Erro de validação de parâmetros}
 
   /salas/{id}:
     get:
@@ -158,6 +187,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Sala'
+        '400': {description: Erro de validação de parâmetros}
 
     put:
       tags: [Admin]
@@ -174,10 +204,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Sala'
+              type: object
+              properties:
+                nome_sala:
+                  type: string
+                  maxLength: 255
+                  example: "Laboratório de Informática"
+                capacidade_sala:
+                  type: integer
+                  minimum: 1
+                  example: 30
+                localizacao_sala:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  example: "Bloco B - 2º andar"
+                descricao_sala:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  example: "Sala equipada com computadores e projetor"
+              required:
+                - nome_sala
+                - capacidade_sala
       responses:
         '200': { description: Sala atualizada com sucesso }
         '403': { description: Acesso negado (somente admin) }
+        '400': { description: Erro de validação de parâmetros}
 
     delete:
       tags: [Admin]
@@ -192,6 +245,7 @@ paths:
       responses:
         '200': { description: Sala removida com sucesso }
         '403': { description: Acesso negado (somente admin) }
+        '400': { description: Erro de validação de parâmetros}
 
 
 
@@ -206,8 +260,32 @@ paths:
       tags: [Admin]
       summary: Criar equipamento (admin)
       security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome_equipamento:
+                  type: string
+                  maxLength: 45
+                  example: "Projetor Epson"
+                descricao_equipamento:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  example: "Projetor 4K com entrada HDMI e VGA"
+                quantidade_equipamento:
+                  type: integer
+                  minimum: 1
+                  example: 3
+              required:
+                - nome_equipamento
+                - quantidade_equipamento
       responses:
         '201': { description: Equipamento criado }
+        '400': { description: Erro de validação de parâmetros}
 
   /equipamento/{id}:
     get:
@@ -230,8 +308,33 @@ paths:
           name: id
           required: true
           schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome_equipamento:
+                  type: string
+                  maxLength: 45
+                  example: "Projetor Epson"
+                descricao_equipamento:
+                  type: string
+                  maxLength: 255
+                  nullable: true
+                  example: "Projetor 4K com entrada HDMI e VGA"
+                quantidade_equipamento:
+                  type: integer
+                  minimum: 1
+                  example: 3
+              required:
+                - nome_equipamento
+                - quantidade_equipamento
       responses:
         '200': { description: Equipamento atualizado }
+        '400': { description: Erro de validação de parâmetros}
+
     delete:
       tags: [Admin]
       summary: Excluir equipamento (admin)
@@ -243,6 +346,8 @@ paths:
           schema: { type: integer }
       responses:
         '200': { description: Equipamento removido }
+        '400': { description: Erro de validação de parâmetros}
+
 
   # ----------------------
   # 🔴 Rotas administrativas
