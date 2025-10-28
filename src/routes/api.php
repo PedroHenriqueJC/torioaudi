@@ -6,6 +6,7 @@ use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\EquipamentoController;
 use App\Http\Controllers\EquipamentoSalaController;
+use App\Http\Controllers\EventoController;
 // Logged routes
 Route::middleware('auth:sanctum')->group(function (){
     Route::get('/me', [UsuarioController::class, 'me']); // Documentada
@@ -18,6 +19,16 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::prefix('sala-equipamento')->group(function (){
         Route::get('sala/{salaId}', [EquipamentoSalaController::class, 'showBySala']); // Documentada
         Route::get('equipamento/{equipamentoId}', [EquipamentoSalaController::class, 'showByEquipamento']); // Documentada
+    });
+
+    Route::prefix('eventos')->group(function (){
+        Route::get('', [EventoController::class, 'index']);
+        Route::post('', [EventoController::class, 'store']);
+        Route::get('{id}', [EventoController::class, 'show']);
+        Route::put('{id}', [EventoController::class, 'update']);
+        Route::delete('{id}', [EventoController::class, 'destroy']);
+        Route::get('usuario/{usuarioId}', [EventoController::class, 'getByUsuario']);
+        Route::get('sala/{salaId}', [EventoController::class, 'getBySala']);
     });
 });
 
