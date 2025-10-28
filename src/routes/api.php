@@ -16,8 +16,8 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::get('/equipamento', [EquipamentoController::class, 'index']); // Documentada
     Route::get('/equipamento/{id}', [EquipamentoController::class, 'show']); // Documentada
     Route::prefix('sala-equipamento')->group(function (){
-        Route::get('sala/{salaId}', [EquipamentoSalaController::class, 'showBySala']);
-        Route::get('equipamento/{equipamentoId}', [EquipamentoSalaController::class, 'showByEquipamento']);
+        Route::get('sala/{salaId}', [EquipamentoSalaController::class, 'showBySala']); // Documentada
+        Route::get('equipamento/{equipamentoId}', [EquipamentoSalaController::class, 'showByEquipamento']); // Documentada
     });
 });
 
@@ -36,9 +36,9 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function (){
     Route::delete('/equipamento/{id}', [EquipamentoController::class, 'destroy']); // Documentada
 
     Route::prefix('sala-equipamento')->group(function (){
-        Route::post('', [EquipamentoSalaController::class, 'store']);
-        Route::put('{salaId}/{equipamentoId}', [EquipamentoSalaController::class, 'update']);
-        Route::delete('{salaId}/{equipamentoId}', [EquipamentoSalaController::class, 'destroy']);
+        Route::post('', [EquipamentoSalaController::class, 'store']); // Documentada
+        Route::put('{salaId}/{equipamentoId}', [EquipamentoSalaController::class, 'update']); // Documentada 
+        Route::delete('{salaId}/{equipamentoId}', [EquipamentoSalaController::class, 'destroy']); // Documentada
     });
 });
 
