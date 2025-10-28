@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\SalaController;
 use App\Http\Controllers\EquipamentoController;
-use App\Http\Controller\EquipamentoSalaController;
+use App\Http\Controllers\EquipamentoSalaController;
 // Logged routes
 Route::middleware('auth:sanctum')->group(function (){
     Route::get('/me', [UsuarioController::class, 'me']); // Documentada
