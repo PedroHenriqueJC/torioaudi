@@ -13,12 +13,14 @@ class SalaController extends Controller
             'nome_sala' => 'required|string|max:255',
             'capacidade_sala' => 'required|integer|min:1',
             'localizacao_sala' => 'nullable|string|max:255',
+            'descricao_sala' => 'nullable|string|max:255',
         ]);
 
         $sala = Sala::create([
             'nome_sala' => $request->nome_sala,
             'capacidade_sala' => $request->capacidade_sala,
             'localizacao_sala' => $request->localizacao_sala,
+            'descricao_sala' => $request->descricao_sala,
         ]);
 
         return response()->json([
@@ -50,13 +52,14 @@ class SalaController extends Controller
             'nome_sala' => 'sometimes|string|max:255',
             'capacidade_sala' => 'sometimes|integer|min:1',
             'localizacao_sala' => 'nullable|string|max:255',
+            'descricao_sala' => 'nullable|string|max:255',
         ]);
 
-        $sala->update($request->only(['nome_sala', 'capacidade_sala', 'localizacao_sala']));
-        return response()->json{[
+        $sala->update($request->only(['nome_sala', 'capacidade_sala', 'localizacao_sala', 'descricao_sala']));
+        return response()->json([
             'message' => 'Sala atualizada com sucesso!',
             'sala' => $sala,
-        ], 200};
+        ], 200);
     }
 
     public function destroy($id){

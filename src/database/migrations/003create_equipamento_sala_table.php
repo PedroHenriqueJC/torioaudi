@@ -15,8 +15,8 @@ return new class extends Migration
 
             $table->primary(['sala_cod_sala', 'equipamento_cod_equipamento']);
 
-            $table->foreign('sala_cod_sala')->references('cod_sala')->on('salas')->onDelete('cascade');
-            $table->foreign('equipamento_cod_equipamento')->references('cod_equipamento')->on('equipamentos')->onDelete('cascade');
+            $table->foreign('sala_cod_sala')->references('cod_sala')->on('sala')->onDelete('cascade');
+            $table->foreign('equipamento_cod_equipamento')->references('cod_equipamento')->on('equipamento')->onDelete('cascade');
         });
     }
 

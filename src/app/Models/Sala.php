@@ -9,10 +9,11 @@ class Sala extends Model
 {
     use HasFactory;
 
-    protected $table = 'salas';
+    protected $table = 'sala';
     protected $primaryKey = 'cod_sala';
     public $incrementing = true;
     protected $keyType = 'int';
+    public $timestamps = false;
 
     protected $fillable = [
         'nome_sala',
@@ -30,7 +31,7 @@ class Sala extends Model
     // Relação Many-to-Many com equipamentos
     public function equipamentos()
     {
-        return $this->belongsToMany(Equipamento::class, 'equipamento_sala', 'sala_cod_sala', 'equipamento_cod_equipamento')
+        return $this->belongsToMany(Equipamento::class, 'equipamento_sala', 'sala_cod_sala', 'equipamento_cod_equipamento')->using(EquipamentoSala::class)
                     ->withPivot('quantidade_equipamento');
     }
 }

@@ -1,25 +1,37 @@
 FROM php:8.2-fpm
 
-# Install extensions needed for Laravel + Postgres
+# Instalar extensões necessárias para Laravel + Postgres
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     unzip \
     git \
     curl \
+    zip \
     && docker-php-ext-install pdo pdo_pgsql
 
-# Install Composer
+# Enable OPcache for performance
+RUN docker-php-ext-install opcache
+
+# Recommended OPcache settings
+COPY ./docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+
+# Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Set working dir
+# Definir diretório de trabalho
 WORKDIR /var/www/html
 
-# Copy Laravel files
-COPY src/ ./
+# Copiar arquivos do projeto (mas ignorar vendor inicialmente)
+COPY src/composer.json src/composer.lock ./
 
-# Install dependencies
+# Instalar dependências antes de copiar o resto (melhora cache do Docker)
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Permissions for Laravel storage
-RUN chown -R www-data:www-data storage bootstrap/cache
+# Agora copiar o resto do projeto
+COPY src/ ./
 
+# Dar permissão para storage e cache
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# CMD ['sh', '-c "if [ ! -f .env ]; then cp .env.example .env; fi && composer install && php artisan key:generate && php artisan migrate --seed && php artisan serve --host=0.0.0.0 --port=8000"']

@@ -15,8 +15,14 @@ services:
       - db
     networks:
       - laravel-net
-    # command: sh -c "php artisan serve --host=0.0.0.0 --port=8000"
-    command: sh -c "php artisan migrate && php artisan serve --host=0.0.0.0 --port=8000"
+    command: >
+       sh -c "
+         if [ ! -f .env ]; then cp .env.example .env; fi &&
+         composer install &&
+         php artisan key:generate &&
+         php artisan migrate --seed &&
+         php artisan serve --host=0.0.0.0 --port=8000
+       "
 
   db:
     image: postgres:16
@@ -38,4 +44,3 @@ networks:
 
 volumes:
   pgdata:
-

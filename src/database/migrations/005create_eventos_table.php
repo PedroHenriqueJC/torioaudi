@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {   
-        Schema::create('eventos', function (Blueprint $table) {
+        Schema::create('evento', function (Blueprint $table) {
             $table->increments('cod_evento');
             $table->timestamp('evento_inicio');
             $table->timestamp('evento_fim');
@@ -21,8 +21,8 @@ return new class extends Migration
             $table->unsignedInteger('usuario_cod_usuario');
             $table->unsignedInteger('sala_cod_sala');
 
-            $table->foreign('usuario_cod_usuario')->references('cod_usuario')->on('usuarios')->onDelete('cascade');
-            $table->foreign('sala_cod_sala')->references('cod_sala')->on('salas')->onDelete('cascade');
+            $table->foreign('usuario_cod_usuario')->references('cod_usuario')->on('usuario')->onDelete('cascade');
+            $table->foreign('sala_cod_sala')->references('cod_sala')->on('sala')->onDelete('cascade');
 
             $table->timestamps();
         });
@@ -30,6 +30,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('eventos');
+        Schema::dropIfExists('evento');
     }
 };
