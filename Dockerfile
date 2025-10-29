@@ -33,3 +33,5 @@ COPY src/ ./
 # Dar permissão para storage e cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# CMD ['sh', '-c "if [ ! -f .env ]; then cp .env.example .env; fi && composer install && php artisan key:generate && php artisan migrate --seed && php artisan serve --host=0.0.0.0 --port=8000"']

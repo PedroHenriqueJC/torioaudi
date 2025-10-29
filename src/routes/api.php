@@ -29,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function (){
         Route::delete('{id}', [EventoController::class, 'destroy']);
         Route::get('usuario/{usuarioId}', [EventoController::class, 'getByUsuario']);
         Route::get('sala/{salaId}', [EventoController::class, 'getBySala']);
+        Route::get('{ano}/{mes}/{dia}', [EventoController::class, 'getByDia']);
     });
 });
 

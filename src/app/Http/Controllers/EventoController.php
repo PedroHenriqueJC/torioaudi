@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Evento;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class EventoController extends Controller
 {   
@@ -143,5 +144,17 @@ class EventoController extends Controller
         }
 
         return response()->json($evento, 200);
+    }
+
+    public function getByDia($dia, $mes, $ano)
+    {
+        $inicio = Carbon::create($ano, $mes, $dia)->startOfDay();
+        $fim = Carbon::create($ano, $mes, $dia)->endOfDay();
+
+        $eventos = Evento::with(['usuario', 'sala', 'equipamentos'])
+            ->whereBetween('evento_inicio', [$inicio, $fim])
+            ->get();
+
+        return response()->json($eventos);
     }
 }

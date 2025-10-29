@@ -655,6 +655,40 @@ paths:
                   $ref: '#/components/schemas/Evento'
         '404':
           description: Nenhum evento encontrado
+  
+  /eventos/{ano}/{mes}/{dia}:
+    get:
+      summary: Lista eventos que ocorrem em um dia
+      tags: [User]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: ano
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: mes
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: dia
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de eventos do dia
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Evento'
+        '404':
+          description: Nenhum evento encontrado
 
   # ----------------------
   # 🔴 Rotas administrativas
