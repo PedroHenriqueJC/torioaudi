@@ -146,7 +146,7 @@ class EventoController extends Controller
         return response()->json($evento, 200);
     }
 
-    public function getByDia($dia, $mes, $ano)
+    public function getByDia($ano, $mes, $dia)
     {
         $inicio = Carbon::create($ano, $mes, $dia)->startOfDay();
         $fim = Carbon::create($ano, $mes, $dia)->endOfDay();
