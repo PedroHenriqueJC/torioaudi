@@ -4,22 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Evento extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'evento';
     protected $primaryKey = 'cod_evento';
     public $incrementing = true;
     protected $keyType = 'int';
 
+    protected $dates = ['deleted_at'];
+
     protected $fillable = [
         'evento_inicio',
         'evento_fim',
         'nome_evento',
         'descricao_evento',
-        'cancelado_evento',
         'pre_agenda_evento',
         'usuario_cod_usuario',
         'sala_cod_sala',

@@ -14,7 +14,7 @@ return new class extends Migration
             $table->timestamp('evento_fim');
             $table->string('nome_evento');
             $table->text('descricao_evento')->nullable();
-            $table->boolean('cancelado_evento')->default(false);
+            $table->softDeletes();
             $table->boolean('pre_agenda_evento')->default(false);
 
             // FKs

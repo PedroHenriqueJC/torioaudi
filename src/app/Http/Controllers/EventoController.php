@@ -17,7 +17,6 @@ class EventoController extends Controller
             'evento_fim' => 'required|date|after_or_equal:evento_inicio',
             'nome_evento' => 'required|string|max:255',
             'descricao_evento' => 'nullable|string',
-            'cancelado_evento' => 'boolean',
             'pre_agenda_evento' => 'boolean',
             'usuario_cod_usuario' => 'required|integer|exists:usuario,cod_usuario',
             'sala_cod_sala' => 'required|integer|exists:sala,cod_sala',
@@ -52,7 +51,6 @@ class EventoController extends Controller
             'evento_fim' => 'sometimes|date|after_or_equal:evento_inicio',
             'nome_evento' => 'sometimes|string|max:255',
             'descricao_evento' => 'nullable|string',
-            'cancelado_evento' => 'boolean',
             'pre_agenda_evento' => 'boolean',
             'usuario_cod_usuario' => 'sometimes|integer|exists:usuario,cod_usuario',
             'sala_cod_sala' => 'sometimes|integer|exists:sala,cod_sala',
@@ -82,12 +80,12 @@ class EventoController extends Controller
             return response()->json(['message' => 'Você não tem permissão para cancelar este evento'], 403);
         }
 
-        if ($evento->cancelado_evento) {
+        if ($evento->trashed()) {
             return response()->json(['message' => 'Evento já está cancelado'], 400);
         }
 
-        $evento->cancelado_evento = true;
-        $evento->save();
+
+        $evento->delete();
 
         return response()->json([
             'message' => 'Evento cancelado com sucesso!',

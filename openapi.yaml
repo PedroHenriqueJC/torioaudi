@@ -72,9 +72,6 @@ components:
           type: string
           nullable: true
           example: "Discussão sobre novos projetos"
-        cancelado_evento:
-          type: boolean
-          example: false
         pre_agenda_evento:
           type: boolean
           example: false
@@ -499,8 +496,6 @@ paths:
                   type: string
                 descricao_evento:
                   type: string
-                cancelado_evento:
-                  type: boolean
                 pre_agenda_evento:
                   type: boolean
                 usuario_cod_usuario:
@@ -571,8 +566,6 @@ paths:
                   type: string
                 descricao_evento:
                   type: string
-                cancelado_evento:
-                  type: boolean
                 pre_agenda_evento:
                   type: boolean
                 usuario_cod_usuario:
