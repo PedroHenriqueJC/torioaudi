@@ -49,7 +49,7 @@ class EquipamentoSalaController extends Controller{
         return response()->json(['message' => 'Quantidade atualizada com sucesso'], 200);
     }
 
-    public function destroy($salaId, $salaEquipamento){
+    public function destroy($salaId, $equipamentoId){
         $sala = Sala::findOrFail($salaId);
         $sala->equipamentos()->detach($equipamentoId);
 

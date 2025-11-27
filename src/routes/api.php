@@ -7,10 +7,12 @@ use App\Http\Controllers\SalaController;
 use App\Http\Controllers\EquipamentoController;
 use App\Http\Controllers\EquipamentoSalaController;
 use App\Http\Controllers\EventoController;
+use App\Http\Controllers\EquipamentoEventoController;
 // Logged routes
 Route::middleware('auth:sanctum')->group(function (){
     Route::get('/me', [UsuarioController::class, 'me']); // Documentada
     Route::post('/logout', [UsuarioController::class, 'logout']); // Documentada
+    Route::put('/user', [UsuarioController::class, 'update']);
 
     Route::get('/salas', [SalaController::class, 'index']); // Documentada
     Route::get('/salas/{id}', [SalaController::class, 'show']); // Documentada
@@ -22,14 +24,22 @@ Route::middleware('auth:sanctum')->group(function (){
     });
 
     Route::prefix('eventos')->group(function (){
-        Route::get('', [EventoController::class, 'index']);
-        Route::post('', [EventoController::class, 'store']);
-        Route::get('{id}', [EventoController::class, 'show']);
-        Route::put('{id}', [EventoController::class, 'update']);
-        Route::delete('{id}', [EventoController::class, 'destroy']);
-        Route::get('usuario/{usuarioId}', [EventoController::class, 'getByUsuario']);
-        Route::get('sala/{salaId}', [EventoController::class, 'getBySala']);
-        Route::get('{ano}/{mes}/{dia}', [EventoController::class, 'getByDia']);
+        Route::get('', [EventoController::class, 'index']); // Documentada
+        Route::post('', [EventoController::class, 'store']); // Documentada
+        Route::get('{id}', [EventoController::class, 'show']); // Documentada
+        Route::put('{id}', [EventoController::class, 'update']); // Documentada
+        Route::delete('{id}', [EventoController::class, 'destroy']); // Documentada
+        Route::get('usuario/{usuarioId}', [EventoController::class, 'getByUsuario']); // Documentada
+        Route::get('sala/{salaId}', [EventoController::class, 'getBySala']); // Documentada
+        Route::get('{ano}/{mes}/{dia}', [EventoController::class, 'getByDia']); // Documentada
+    });
+
+    Route::prefix('equipamento-evento')->group(function (){
+        Route::get('evento/{eventoId}', [EquipamentoEventoController::class, 'showByEvento']);
+        Route::get('equipamento/{equipamentoId}', [EquipamentoEventoController::class, 'showByEquipamento']);
+        Route::post('', [EquipamentoEventoController::class, 'store']);
+        Route::put('', [EquipamentoEventoController::class, 'update']);
+        Route::delete('{eventoId}/{equipamentoId}', [EquipamentoEventoController::class, 'destroy']);
     });
 });
 

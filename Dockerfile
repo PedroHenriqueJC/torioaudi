@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
 
-# Instalar extensões necessárias para Laravel + Postgres
+# Instalar extensões para Laravel + Postgres
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     unzip \
@@ -9,29 +9,50 @@ RUN apt-get update && apt-get install -y \
     zip \
     && docker-php-ext-install pdo pdo_pgsql
 
-# Enable OPcache for performance
+# Instalar OPcache
 RUN docker-php-ext-install opcache
 
-# Recommended OPcache settings
-COPY ./docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+# Configurações recomendadas do OPcache
+RUN echo "opcache.enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini \
+ && echo "opcache.memory_consumption=128" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini \
+ && echo "opcache.interned_strings_buffer=8" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini \
+ && echo "opcache.max_accelerated_files=10000" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini \
+ && echo "opcache.validate_timestamps=0" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini \
+ && echo "opcache.save_comments=1" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
 
 # Instalar Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Definir diretório de trabalho
+# Diretório de trabalho
 WORKDIR /var/www/html
 
-# Copiar arquivos do projeto (mas ignorar vendor inicialmente)
+#########################################
+# 1. Copiar composer.json primeiro
+#########################################
 COPY src/composer.json src/composer.lock ./
 
-# Instalar dependências antes de copiar o resto (melhora cache do Docker)
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+#########################################
+# 2. Instalar dependências SEM scripts
+#########################################
+RUN composer install \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-scripts
 
-# Agora copiar o resto do projeto
+#########################################
+# 3. Copiar o restante do código
+#########################################
 COPY src/ ./
 
-# Dar permissão para storage e cache
+#########################################
+# 4. Agora sim rodar scripts do Laravel
+#########################################
+RUN composer install \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader
+
+# Permissões
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
-
-# CMD ['sh', '-c "if [ ! -f .env ]; then cp .env.example .env; fi && composer install && php artisan key:generate && php artisan migrate --seed && php artisan serve --host=0.0.0.0 --port=8000"']
