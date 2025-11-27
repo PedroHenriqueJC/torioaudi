@@ -498,8 +498,6 @@ paths:
                   type: string
                 pre_agenda_evento:
                   type: boolean
-                usuario_cod_usuario:
-                  type: integer
                 sala_cod_sala:
                   type: integer
       responses:
@@ -568,8 +566,6 @@ paths:
                   type: string
                 pre_agenda_evento:
                   type: boolean
-                usuario_cod_usuario:
-                  type: integer
                 sala_cod_sala:
                   type: integer
       responses:

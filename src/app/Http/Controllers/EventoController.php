@@ -12,15 +12,23 @@ class EventoController extends Controller
     // POST INSERT
     
     public function store(Request $request){
+
+        // obter usuário autenticado a partir do token
+        $usuario = auth()->user();
+        if (!$usuario) {
+            return response()->json(['message' => 'Usuário não autenticado'], 401);
+        }
+
         $validated = $request->validate([
             'evento_inicio' => 'required|date',
             'evento_fim' => 'required|date|after_or_equal:evento_inicio',
             'nome_evento' => 'required|string|max:255',
             'descricao_evento' => 'nullable|string',
             'pre_agenda_evento' => 'boolean',
-            'usuario_cod_usuario' => 'required|integer|exists:usuario,cod_usuario',
             'sala_cod_sala' => 'required|integer|exists:sala,cod_sala',
         ]);
+
+        $validated['usuario_cod_usuario'] = $usuario->cod_usuario;
 
         $evento = Evento::create($validated);
 
@@ -52,9 +60,10 @@ class EventoController extends Controller
             'nome_evento' => 'sometimes|string|max:255',
             'descricao_evento' => 'nullable|string',
             'pre_agenda_evento' => 'boolean',
-            'usuario_cod_usuario' => 'sometimes|integer|exists:usuario,cod_usuario',
             'sala_cod_sala' => 'sometimes|integer|exists:sala,cod_sala',
         ]);
+
+        $validated['usuario_cod_usuario'] = $usuario->cod_usuario;
 
         $evento->update($validated);
 
