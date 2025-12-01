@@ -678,6 +678,146 @@ paths:
                   $ref: '#/components/schemas/Evento'
         '404':
           description: Nenhum evento encontrado
+  /equipamento-evento/evento/{eventoId}:
+    get:
+      summary: Listar equipamentos vinculados a um evento
+      tags: [User]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: eventoId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de equipamentos vinculados ao evento
+        '404':
+          description: Evento não encontrado
+
+  /equipamento-evento/equipamento/{equipamentoId}:
+    get:
+      summary: Listar eventos vinculados a um equipamento
+      tags: [User]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: equipamentoId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de eventos associados ao equipamento
+        '404':
+          description: Equipamento não encontrado
+
+  /equipamento-evento:
+    post:
+      summary: Adicionar ou atualizar um equipamento em um evento
+      description: Somente o criador do evento ou um administrador pode adicionar um equipamento ao evento.
+      tags: [User]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - evento_cod_evento
+                - equipamento_cod_equipamento
+                - quantidade_equipamento_emprestado
+              properties:
+                evento_cod_evento:
+                  type: integer
+                  example: 5
+                  description: Código do evento
+                equipamento_cod_equipamento:
+                  type: integer
+                  example: 3
+                  description: Código do equipamento
+                quantidade_equipamento_emprestado:
+                  type: integer
+                  minimum: 0
+                  example: 2
+                  description: Quantidade do equipamento emprestado para o evento
+      responses:
+        '200':
+          description: Equipamento adicionado ou atualizado com sucesso
+        '403':
+          description: Usuário sem permissão para alterar este evento
+        '404':
+          description: Evento ou equipamento não encontrado
+
+    put:
+      summary: Atualizar quantidade de um equipamento em um evento.
+      description: Somente o criador do evento ou um administrador pode modeificar um equipamento ao evento.
+      tags: [User]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: eventoId
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: equipamentoId
+          in: query
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - quantidade_equipamento_emprestado
+              properties:
+                quantidade_equipamento_emprestado:
+                  type: integer
+                  minimum: 0
+                  example: 4
+                  description: Nova quantidade emprestada do equipamento no evento
+      responses:
+        '200':
+          description: Quantidade atualizada com sucesso
+        '403':
+          description: Usuário sem permissão para atualizar este evento
+        '404':
+          description: Evento ou equipamento não encontrado
+
+  /equipamento-evento/{eventoId}/{equipamentoId}:
+    delete:
+      summary: Remover um equipamento de um evento
+      description: Somente o criador do evento ou um administrador pode excluir um equipamento ao evento.
+      tags: [User]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: eventoId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: equipamentoId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Equipamento removido com sucesso do evento
+        '403':
+          description: Usuário sem permissão para remover este equipamento
+        '404':
+          description: Evento ou equipamento não encontrado
+
 
   # ----------------------
   # 🔴 Rotas administrativas
@@ -811,3 +951,5 @@ paths:
           description: Equipamento removido com sucesso
         '404':
           description: Sala ou equipamento não encontrado
+
+  
