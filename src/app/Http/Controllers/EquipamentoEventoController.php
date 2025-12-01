@@ -26,6 +26,12 @@ class EquipamentoEventoController extends Controller{
 
         $evento = Evento::findOrFail($request->evento_cod_evento);
 
+        $usuario = auth()->user();
+
+        if (!$usuario->is_admin && $evento->usuario_cod_usuario !== $usuario->cod_usuario) {
+            abort(403, 'Você não tem permissão para modificar os equipamentos deste evento');
+        }
+
         $evento->equipamentos()->syncWithoutDetaching([
             $request->equipamento_cod_equipamento => [
                 'quantidade_equipamento_emprestado' => $request->quantidade_equipamento_emprestado
@@ -42,6 +48,12 @@ class EquipamentoEventoController extends Controller{
 
         $evento = Sala::findOrFail($eventoId);
 
+        $usuario = auth()->user();
+
+        if (!$usuario->is_admin && $evento->usuario_cod_usuario !== $usuario->cod_usuario) {
+            abort(403, 'Você não tem permissão para modificar os equipamentos deste evento');
+        }
+
         $evento->equipamentos()->updateExistingPivot($equipamentoId, [
             'quantidade_equipamento_emprestado' => $request->quantidade_equipamento_emprestado
         ]);
@@ -51,6 +63,13 @@ class EquipamentoEventoController extends Controller{
 
     public function destroy($eventoId, $equipamentoId){
         $evento = Evento::findOrFail($eventoId);
+        
+        $usuario = auth()->user();
+
+        if (!$usuario->is_admin && $evento->usuario_cod_usuario !== $usuario->cod_usuario) {
+            abort(403, 'Você não tem permissão para modificar os equipamentos deste evento');
+        }
+        
         $evento->equipamentos()->detach($equipamentoId);
 
         return response()->json(['message' => 'Equipamento removido com sucesso'], 200);
