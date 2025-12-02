@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class EquipamentoSala extends Pivot
+class EquipamentoEvento extends Pivot
 {
     protected $table = 'equipamento_evento';
     public $incrementing = false;
