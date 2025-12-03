@@ -12,7 +12,7 @@ use App\Http\Controllers\EquipamentoEventoController;
 Route::middleware('auth:sanctum')->group(function (){
     Route::get('/me', [UsuarioController::class, 'me']); // Documentada
     Route::post('/logout', [UsuarioController::class, 'logout']); // Documentada
-    Route::put('/user', [UsuarioController::class, 'update']);
+    Route::put('/usuarios', [UsuarioController::class, 'update']);
 
     Route::get('/salas', [SalaController::class, 'index']); // Documentada
     Route::get('/salas/{id}', [SalaController::class, 'show']); // Documentada
@@ -51,7 +51,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function (){
     Route::delete('/usuarios/{id}', [UsuarioController::class, 'destroy']); // Documentada
     Route::post('/usuarios/{id}/restore', [UsuarioController::class, 'restore']); // Documentada
     Route::get('/usuarios', [UsuarioController::class, 'index']); // Documentada
-
 
     Route::post('/equipamento', [EquipamentoController::class, 'store']); // Documentada
     Route::put('/equipamento/{id}', [EquipamentoController::class, 'update']); // Documentada
