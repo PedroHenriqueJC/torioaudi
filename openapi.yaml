@@ -483,7 +483,6 @@ paths:
                 - evento_inicio
                 - evento_fim
                 - nome_evento
-                - usuario_cod_usuario
                 - sala_cod_sala
               properties:
                 evento_inicio:

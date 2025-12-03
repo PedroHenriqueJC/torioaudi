@@ -28,6 +28,20 @@ class EventoController extends Controller
             'sala_cod_sala' => 'required|integer|exists:sala,cod_sala',
         ]);
 
+        $conflito = Evento::where('sala_cod_sala', $validated['sala_cod_sala'])
+            ->where(function ($q) use ($validated) {
+                $q->where('evento_inicio', '<', $validated['evento_fim'])
+                ->where('evento_fim', '>', $validated['evento_inicio']);
+            })
+            ->exists();
+
+        if ($conflito) {
+            return response()->json([
+                'message' => 'Já existe um evento nessa sala nesse intervalo de tempo.'
+            ], 422);
+        }
+
+
         $validated['usuario_cod_usuario'] = $usuario->cod_usuario;
 
         $evento = Evento::create($validated);
@@ -62,6 +76,26 @@ class EventoController extends Controller
             'pre_agenda_evento' => 'boolean',
             'sala_cod_sala' => 'sometimes|integer|exists:sala,cod_sala',
         ]);
+
+        $dadosFinais = [
+            'evento_inicio' => $validated['evento_inicio'] ?? $evento->evento_inicio,
+            'evento_fim'    => $validated['evento_fim'] ?? $evento->evento_fim,
+            'sala_cod_sala' => $validated['sala_cod_sala'] ?? $evento->sala_cod_sala,
+        ];
+
+        $conflito = Evento::where('sala_cod_sala', $dadosFinais['sala_cod_sala'])
+            ->where('cod_evento', '!=', $evento->cod_evento)
+            ->where(function ($q) use ($dadosFinais) {
+                $q->where('evento_inicio', '<', $dadosFinais['evento_fim'])
+                ->where('evento_fim', '>', $dadosFinais['evento_inicio']);
+            })
+            ->exists();
+
+        if ($conflito) {
+            return response()->json([
+                'message' => 'Já existe um evento nessa sala nesse intervalo de tempo.'
+            ], 422);
+        }
 
         $validated['usuario_cod_usuario'] = $usuario->cod_usuario;
 
