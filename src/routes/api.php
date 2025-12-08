@@ -12,7 +12,7 @@ use App\Http\Controllers\EquipamentoEventoController;
 Route::middleware('auth:sanctum')->group(function (){
     Route::get('/me', [UsuarioController::class, 'me']); // Documentada
     Route::post('/logout', [UsuarioController::class, 'logout']); // Documentada
-    Route::put('/usuarios', [UsuarioController::class, 'update']);
+    Route::put('/usuarios/{id}', [UsuarioController::class, 'update']);
 
     Route::get('/salas', [SalaController::class, 'index']); // Documentada
     Route::get('/salas/{id}', [SalaController::class, 'show']); // Documentada
