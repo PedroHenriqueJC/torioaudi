@@ -44,6 +44,7 @@ RUN composer install \
     --no-interaction \
     --prefer-dist \
     --optimize-autoloader
+RUN apt-get update && apt-get install -y netcat-openbsd
 
 # Permissões
 RUN chown -R www-data:www-data storage bootstrap/cache \
