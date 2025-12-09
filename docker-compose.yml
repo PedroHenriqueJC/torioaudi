@@ -7,22 +7,12 @@ services:
       dockerfile: Dockerfile
     container_name: laravel_app
     working_dir: /var/www/html
-    volumes:
-      - ./src:/var/www/html
     ports:
       - "8000:8000"
     depends_on:
       - db
     networks:
       - laravel-net
-    command: >
-       sh -c "
-         if [ ! -f .env ]; then cp .env.example .env; fi &&
-         composer install &&
-         php artisan key:generate &&
-         php artisan migrate --seed &&
-         php artisan serve --host=0.0.0.0 --port=8000
-       "
 
   db:
     image: postgres:16

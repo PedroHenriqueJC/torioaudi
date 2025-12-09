@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
 
-# Instalar extensões para Laravel + Postgres
+# Instalar extensões necessárias
 RUN apt-get update && apt-get install -y \
     libpq-dev \
     unzip \
@@ -27,32 +27,35 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 #########################################
-# 1. Copiar composer.json primeiro
+# Copiar e instalar dependências
 #########################################
 COPY src/composer.json src/composer.lock ./
 
-#########################################
-# 2. Instalar dependências SEM scripts
-#########################################
 RUN composer install \
     --no-interaction \
     --prefer-dist \
     --optimize-autoloader \
     --no-scripts
 
-#########################################
-# 3. Copiar o restante do código
-#########################################
+# Copiar resto do código
 COPY src/ ./
 
-#########################################
-# 4. Agora sim rodar scripts do Laravel
-#########################################
 RUN composer install \
     --no-interaction \
     --prefer-dist \
     --optimize-autoloader
 
 # Permissões
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
+#########################################
+# Script auto-init do Laravel
+#########################################
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+EXPOSE 8000
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
