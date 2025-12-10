@@ -97,7 +97,7 @@ class UsuarioController extends Controller
         return response()->json($user, 200);
     }
 
-    public function update(Request $request, $id)
+    ppublic function update(Request $request, $id)
     {
         $usuario = $request->user();
         $user = Usuario::find($id);
@@ -116,19 +116,26 @@ class UsuarioController extends Controller
             'role_usuario' => 'sometimes|integer'
         ]);
 
-        $data = $request->only(['nome_usuario', 'senha_usuario']);
-
-        if ($usuario->isAdmin() && $request->filled('role_usuario')) {
-            $data['role_usuario'] = $request->role_usuario;
+        if ($request->filled('nome_usuario')) {
+            $user->nome_usuario = $request->nome_usuario;
         }
 
-        $user->update($data);
+        if ($request->filled('senha_usuario')) {
+            $user->senha_usuario = $request->senha_usuario; // cast hashed
+        }
+
+        if ($usuario->isAdmin() && $request->filled('role_usuario')) {
+            $user->role_usuario = $request->role_usuario;
+        }
+
+        $user->save();
 
         return response()->json([
             'message' => 'Usuário atualizado com sucesso',
             'usuario' => $user,
         ], 200);
     }
+
 
 
     public function destroy($id){
