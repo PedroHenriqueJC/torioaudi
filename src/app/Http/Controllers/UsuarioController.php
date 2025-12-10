@@ -97,15 +97,16 @@ class UsuarioController extends Controller
         return response()->json($user, 200);
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $usuario = $request->user();
         $user = Usuario::find($id);
 
-        if(!$user){
+        if (!$user) {
             return response()->json(['message' => 'Usuário não encontrado'], 404);
         }
 
-        if(!$usuario->isAdmin() && $usuario->cod_usuario != $id){
+        if (!$usuario->isAdmin() && $usuario->cod_usuario != $id) {
             return response()->json(['message' => 'Acesso negado!'], 403);
         }
 
@@ -114,14 +115,11 @@ class UsuarioController extends Controller
             'senha_usuario' => 'sometimes|string|min:6',
             'role_usuario' => 'sometimes|integer'
         ]);
-        $data = $request->only(['nome_usuario']);
 
-        if($usuario->isAdmin() && $request->filled('role_usuario')){
+        $data = $request->only(['nome_usuario', 'senha_usuario']);
+
+        if ($usuario->isAdmin() && $request->filled('role_usuario')) {
             $data['role_usuario'] = $request->role_usuario;
-        }
-
-        if($request->filled('senha_usuario')){
-            $data['senha_usuario'] = Hash::make($request->senha_usuario);
         }
 
         $user->update($data);
@@ -131,6 +129,7 @@ class UsuarioController extends Controller
             'usuario' => $user,
         ], 200);
     }
+
 
     public function destroy($id){
         $usuario = auth()->user();
