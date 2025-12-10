@@ -15,7 +15,7 @@ class Evento extends Model
     public $incrementing = true;
     protected $keyType = 'int';
 
-    protected $dates = ['deleted_at'];
+    protected $dates = ['evento_inicio', 'evento_fim', 'deleted_at'];
 
     protected $fillable = [
         'evento_inicio',
