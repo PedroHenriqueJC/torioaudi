@@ -189,11 +189,8 @@ class EventoController extends Controller
 
     public function getByDia($ano, $mes, $dia)
     {
-        $inicio = Carbon::create($ano, $mes, $dia)->startOfDay();
-        $fim = Carbon::create($ano, $mes, $dia)->endOfDay();
-
         $eventos = Evento::with(['usuario', 'sala', 'equipamentos'])
-            ->whereBetween('evento_inicio', [$inicio, $fim])
+            ->whereDate('evento_inicio', '=', "$ano-$mes-$dia")
             ->get();
 
         return response()->json($eventos);
